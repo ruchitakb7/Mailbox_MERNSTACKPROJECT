@@ -1,0 +1,22 @@
+.formcont{
+    width: 600px;
+    padding: 20px;
+    border: 1px solid white;
+    background-color: cyan;
+    border-radius: 20px;
+    box-shadow: 4px,4px,4px,4px rgba(0px,0px,0px,0.3px);
+    color: black;
+    margin-top: 100px;
+    margin-left: 370px;
+     font-size: 14px;
+     font-weight: bold;
+     display: flex;
+    
+}
+.img{
+    width: 300px;
+}
+
+.formcol{
+    width: r00px;
+}
