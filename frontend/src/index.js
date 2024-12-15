@@ -26,12 +26,16 @@ import reportWebVitals from './reportWebVitals';
 import 'react-bootstrap/dist/react-bootstrap';  // Correct way to import react-bootstrap
 import 'bootstrap/dist/css/bootstrap.css';
 import { BrowserRouter } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import store from './store/store';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
+  <Provider store={store}>
   <BrowserRouter>
     <App />
   </BrowserRouter>
+  </Provider>
 );
 
 reportWebVitals();

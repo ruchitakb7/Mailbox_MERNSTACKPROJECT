@@ -1,0 +1,23 @@
+.maindiv {
+    width: 700px;
+    display: flex;  /* Flex container */
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 4px,4px,4px,4px rgba(0px,0px,0px,0.3px);
+    border: 1px solid white;
+    margin-top: 100px;
+    margin-left: 300px;
+     font-size: 14px;
+     font-weight: bold;
+     background-color: aqua;
+  }
+  
+  .left-div, .right-div {
+    flex: 1;  /* Equal width */
+    display: flex; 
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  

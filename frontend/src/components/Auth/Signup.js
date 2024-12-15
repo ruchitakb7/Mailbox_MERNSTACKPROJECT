@@ -1,41 +1,30 @@
-import React, { useState } from "react";
-import { Row, Col, Form, Image, Button,Modal } from "react-bootstrap";
+import React from "react";
+import { Row, Col, Form, Image, Button, Modal } from "react-bootstrap";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { updateFormData, signupUser, resetModal } from "../../store/authSlice";
 import "./loginform.css";
 import pic from "../../assets/pic.webp";
-import axios from "axios";
-
 
 const Signup = () => {
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-    confirmPassword: "",
-  });
-  const [modalError, setModalError] = useState(""); 
-  const [showModal, setShowModal] = useState(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { formData, showModal,formErrors,modalMessage } = useSelector(
+    (state) => state.auth
+  );
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    dispatch(updateFormData({ name: e.target.name, value: e.target.value }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    try {
-      const response = await axios.post('http://localhost:5000/signup', formData);
-      
-      setModalError(response.data.message);
-      setShowModal(true)
-      setFormData({
-        email: "",
-        password: "",
-        confirmPassword: "",
-      });
-    } catch (error) {
-      console.error("Error signing up:", error);
-      setModalError(error.response?.data?.message || "An error occurred");
-      setShowModal(true)
-    }
-    
+    dispatch(signupUser({ formData, navigate }));
+  };
+
+  const onHide = () => {
+    dispatch(resetModal())
+    navigate("/login");
   };
 
   return (
@@ -62,8 +51,10 @@ const Signup = () => {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
+                required
               />
             </Form.Group>
+
             <Form.Group className="mb-3">
               <Form.Label>Password</Form.Label>
               <Form.Control
@@ -72,8 +63,11 @@ const Signup = () => {
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
+                required
               />
+             
             </Form.Group>
+
             <Form.Group className="mb-3">
               <Form.Label>Confirm Password</Form.Label>
               <Form.Control
@@ -82,26 +76,47 @@ const Signup = () => {
                 name="confirmPassword"
                 value={formData.confirmPassword}
                 onChange={handleChange}
+                required
               />
             </Form.Group>
-            <div className="text-center mt-3">
-              <Button variant="primary" type="submit">
+
+           
+            <div className="text-center mt-3 mb-2">
+              <Button variant="primary" type="submit" className="w-100">
                 Sign Up
               </Button>
             </div>
+            <div>
+              <p> Already have an account?{" "}
+                <span>
+                  <Link
+                    className="text-sm font-semibold text-blue-600 hover:text-blue-700"
+                    to="/login">
+                    Login
+                  </Link>
+                </span>
+              </p>
+            </div>
           </Form>
+
+          {formErrors && (
+               <div className="text-danger mb-3 centred">
+                 {typeof formErrors === "string" ? formErrors : JSON.stringify(formErrors)}
+              </div>)}
         </Col>
+        
       </Row>
-      <Modal show={showModal} onHide={() => setShowModal(false)} centered size="sm">
-        <Modal.Header closebutton>
-          <Modal.Title>Error</Modal.Title>
+
+      <Modal show={showModal} onHide={onHide} centered>
+        <Modal.Header>
+          <Modal.Title>Success</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <p>{modalError}</p>
+          <p>{modalMessage}</p>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowModal(false)}>
-            Close
+          <Button size="sm" variant="secondary" onClick={onHide}>
+            OK
           </Button>
         </Modal.Footer>
       </Modal>
@@ -110,3 +125,4 @@ const Signup = () => {
 };
 
 export default Signup;
+
