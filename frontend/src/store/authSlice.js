@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
 const intialtoken=localStorage.getItem('token') || null
+const initailId=localStorage.getItem('userId')
 
 export const signupUser = createAsyncThunk(
   "auth/signupUser",
@@ -55,9 +56,12 @@ const authSlice = createSlice({
     },
     showModal: false,
     modalMessage: "",
-    formErrors: "",
+    formsignErrors: "",
+    formlogErrors: "",
     token:intialtoken,
+    userId:initailId,
     islogin:!!intialtoken,
+    name:""
   },
   reducers: {
     updateFormData: (state, action) => {
@@ -73,11 +77,14 @@ const authSlice = createSlice({
       state.modalMessage = "";
     },
     clearMessages: (state) => {
-      state.formErrors = "";
+      state.formsignErrors = "";
+      state.formlogErrors = "";
     },
     logout:(state)=>{
       localStorage.removeItem('token')
+      localStorage.removeItem('userId')
       state.token=""
+      state.userId=""
       state.islogin=false
     }
   },
@@ -86,7 +93,7 @@ const authSlice = createSlice({
       .addCase(signupUser.pending, (state) => {
         state.showModal = false;
         state.modalMessage = "";
-        state.formErrors = "";
+        state.formsignErrors = "";
       })
       .addCase(signupUser.fulfilled, (state, action) => {
         state.showModal = true;
@@ -95,25 +102,28 @@ const authSlice = createSlice({
       })
       .addCase(signupUser.rejected, (state, action) => {
 
-        state.formErrors = action.payload ||  "An unknown error occurred.";
+        state.formsignErrors = action.payload ||  "An unknown error occurred.";
       
       })
       .addCase(loginUser.pending,(state)=> {
         state.showModal = false;
         state.modalMessage = "";
-        state.formErrors = "";
+        state.formlogErrors = "";
       
       })
       .addCase(loginUser.fulfilled,(state,action)=>{
         state.showModal = true;
         state.modalMessage = action.payload.message;
         state.token=action.payload.token;
+        state.userId=action.payload.userId;
         localStorage.setItem('token',state.token)
-        state.islogin=true
-        state.userData = { email: "", password: ""};
+        localStorage.setItem('userId',state.userId)
+        state.islogin=true;
+        state.name=state.userData.email;
+        state.userData = { email:"", password: ""};
       })
       .addCase(loginUser.rejected,(state,action)=>{
-        state.formErrors=action.payload||" something went wrong "
+        state.formlogErrors=action.payload||" something went wrong "
 
       })
   },

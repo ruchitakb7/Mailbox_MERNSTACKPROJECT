@@ -9,7 +9,7 @@ import pic from "../../assets/pic.webp";
 const Signup = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { formData, showModal,formErrors,modalMessage } = useSelector(
+  const { formData, showModal,formsignErrors,modalMessage } = useSelector(
     (state) => state.auth
   );
 
@@ -65,7 +65,6 @@ const Signup = () => {
                 onChange={handleChange}
                 required
               />
-             
             </Form.Group>
 
             <Form.Group className="mb-3">
@@ -80,7 +79,6 @@ const Signup = () => {
               />
             </Form.Group>
 
-           
             <div className="text-center mt-3 mb-2">
               <Button variant="primary" type="submit" className="w-100">
                 Sign Up
@@ -99,12 +97,11 @@ const Signup = () => {
             </div>
           </Form>
 
-          {formErrors && (
+          {formsignErrors && (
                <div className="text-danger mb-3 centred">
-                 {typeof formErrors === "string" ? formErrors : JSON.stringify(formErrors)}
+                 {typeof formsignErrors === "string" ? formsignErrors : JSON.stringify(formsignErrors)}
               </div>)}
         </Col>
-        
       </Row>
 
       <Modal show={showModal} onHide={onHide} centered>
@@ -112,7 +109,7 @@ const Signup = () => {
           <Modal.Title>Success</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <p>{modalMessage}</p>
+        <center><p>{modalMessage}</p></center> 
         </Modal.Body>
         <Modal.Footer>
           <Button size="sm" variant="secondary" onClick={onHide}>

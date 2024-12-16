@@ -89,6 +89,7 @@ exports.login = async (req, res, next) => {
         }
 
         const user = await User.findOne({ email });
+        console.log(user,'backenddd')
         if (!user) {
             return res.status(404).json({ success: false, message: 'User does not exist' });
         }
@@ -101,7 +102,8 @@ exports.login = async (req, res, next) => {
                 return res.status(200).json({
                     success: true,
                     message: 'User has been logged in successfully',
-                    token: generateAccessToken(user._id, user.name),
+                    token: generateAccessToken(user._id, user.email),
+                    userId:user._id
                 });
             } else {
                 return res.status(400).json({ success: false, message: 'Password is incorrect' });

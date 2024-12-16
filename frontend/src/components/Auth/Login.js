@@ -10,7 +10,7 @@ const Login = () => {
  
    const dispatch=useDispatch()
    const navigate=useNavigate()
-   const { token,userData, showModal,formErrors,modalMessage } = useSelector((state) => state.auth)
+   const { token,userData, showModal,formlogErrors,modalMessage } = useSelector((state) => state.auth)
   
 
   const handleChange = (e) => {
@@ -92,9 +92,9 @@ const Login = () => {
                         </p>
                       </div>
 
-                      {formErrors && (
+                      {formlogErrors && (
                <p className="text-danger mb-3 centred">
-                 {typeof formErrors === "string" ? formErrors : JSON.stringify(formErrors)}
+                 {typeof formlogErrors === "string" ? formlogErrors : JSON.stringify(formlogErrors)}
               </p>)}
          </div>
         
@@ -103,7 +103,7 @@ const Login = () => {
                    <Modal.Title>Success</Modal.Title>
                  </Modal.Header>
                  <Modal.Body>
-                   <p>{modalMessage}</p>
+                 <center><p>{modalMessage}</p></center> 
                  </Modal.Body>
                  <Modal.Footer>
                    <Button size="sm" variant="secondary" onClick={onHide}>
