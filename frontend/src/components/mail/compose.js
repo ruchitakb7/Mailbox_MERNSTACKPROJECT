@@ -1,53 +1,51 @@
-
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import './ComposeMail.css';
-import Editor from "./maileditor"
+import { useSelector, useDispatch } from 'react-redux';
+import EditorComponent from "./maileditor";
+import { updateTo, updateSubject, updateContent, sendMail } from '../../store/composeSlice';
+import "./ComposeMail.css"
 
 export default function ComposeMail() {
-
-  const [to, setTo] = useState('');
-  const [subject, setSubject] = useState('');
-  const [content, setContent] = useState('');
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { name } = useSelector((state) => state.auth.name);
+  const { to, subject, content, status, error } = useSelector((state) => state.compose);
 
+  const {token,name} =useSelector((state)=>state.auth)
+  console.log(token)
   function handleSend() {
+    const mailDetails = {
+      to,
+      subject,
+      content: JSON.stringify(content),
+    };
+    console.log(mailDetails)
+
     if (!to || !subject || !content) {
       alert('All fields are required!');
       return;
     }
 
-    const mailDetails = {
-      to,
-      subject,
-      content,
-    };
-
-    console.log('Mail Sent:', mailDetails);
-
-    navigate('/mail/sent');
+    dispatch(sendMail({ mailDetails, token: token }));
   }
 
   return (
     <div className="compose-mail-container">
-      <header className="bg-primary text-white p-1 d-flext justify-content-between">
+      <header className="bg-primary text-white d-flex justify-content-between">
         <h6>Compose Mail</h6>
-        <button className="btn btn-light float-end" onClick={() => navigate(-1)}>
+        <button className="btn btn-light" onClick={() => navigate(-1)}>
           ✕
         </button>
       </header>
       <div className="p-3">
-        <div className="mb-3 d-flex align-items-center">
-          <label htmlFor="from" className="form-label me-2">
+      <div className="mb-3 d-flex align-items-center">
+          <label htmlFor="to" className="form-label me-2">
             From:
           </label>
           <input
             type="email"
-            className="form-control flex-grow-1 "
-            defaultValue={name}
-            readOnly
+            className="form-control flex-grow-1"
+            value={name}
+           readOnly
           />
         </div>
         <div className="mb-3 d-flex align-items-center">
@@ -59,7 +57,8 @@ export default function ComposeMail() {
             id="to"
             className="form-control flex-grow-1"
             value={to}
-            onChange={(e) => setTo(e.target.value)}
+            onChange={(e) => dispatch(updateTo(e.target.value))}
+            required
           />
         </div>
         <div className="mb-3 d-flex align-items-center">
@@ -71,27 +70,16 @@ export default function ComposeMail() {
             id="subject"
             className="form-control flex-grow-1"
             value={subject}
-            onChange={(e) => setSubject(e.target.value)}
+            onChange={(e) => dispatch(updateSubject(e.target.value))}
           />
         </div>
         <div>
-            <Editor></Editor>
+        <EditorComponent onContentChange={(contentState) => dispatch(updateContent(contentState))}/>
         </div>
-        <div className="mb-3 d-flex flex-column">
-          <label htmlFor="content" className="form-label">
-            Content:
-          </label>
-          <textarea
-            id="content"
-            className="form-control"
-            rows="5"
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-          ></textarea>
-        </div>
-        <button className="btn btn-primary w-100" onClick={handleSend}>
-          Send
+        <button className="btn btn-primary w-100" onClick={handleSend} disabled={status === 'loading'}>
+          {status === 'loading' ? 'Sending...' : 'Send'}
         </button>
+        {status === 'failed' && <p className="text-danger mt-2">{error}</p>}
       </div>
     </div>
   );

@@ -4,12 +4,13 @@ import axios from "axios";
 const intialtoken=localStorage.getItem('token') || null
 const initailId=localStorage.getItem('userId')
 
+
 export const signupUser = createAsyncThunk(
   "auth/signupUser",
   async (formData, { rejectWithValue }) => {
     try {
        
-      const response = await axios.post("http://localhost:5001/signup", formData, {
+      const response = await axios.post("http://localhost:5000/signup", formData, {
         headers: { "Content-Type": "application/json" },
       });
     
@@ -28,7 +29,7 @@ export const loginUser= createAsyncThunk(
   "auth/loginUser",
   async (userData,{rejectWithValue}) => {
     try{
-      const response = await axios.post("http://localhost:5001/login", userData, {
+      const response = await axios.post("http://localhost:5000/login", userData, {
         headers: { "Content-Type": "application/json" },
       });
       return response.data;
@@ -81,6 +82,7 @@ const authSlice = createSlice({
       state.formlogErrors = "";
     },
     logout:(state)=>{
+      
       localStorage.removeItem('token')
       localStorage.removeItem('userId')
       state.token=""

@@ -8,25 +8,21 @@ const mailSchema= new Schema({
         ref:'User',
         required:true
     },
+    to:{
+         type:String,
+         required:true
+    },
     subject: {
         type: String,
-        defaultValue: "No Subject",
+        default: "No Subject",
       },
-      body: {
-        type: Text,
+      content: {
+        type: String,
         allowNull: false,
-      },
-      isDeleted: {
-        type: Boolean,
-        defaultValue: false,
-      },
-      isSeen: {
-        type: Boolean,
-        defaultValue: false,
       },
       createdAt: {
         type: Date,
-        defaultValue: DataTypes.NOW,
+        defaul: Date.now,
       },
 
 

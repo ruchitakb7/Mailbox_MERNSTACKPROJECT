@@ -1,11 +1,9 @@
 
-/* ComposeMail.css */
 .compose-mail-container {
-    width: 100%;
+    width:100%;
     margin: 0 auto;
     border: 1px solid #ddd;
     border-radius: 8px;
-    overflow: hidden;
     background-color: #fff;
     overflow: scroll;
     font-size: 14px;

@@ -1,4 +1,4 @@
-/* EditorComponent.css */
+
 .editor-container {
     border: 1px solid #ddd;
     border-radius: 4px;
@@ -7,5 +7,6 @@
   
   .rdw-editor-main {
     border: none;
+    min-height: 200px;
   }
   

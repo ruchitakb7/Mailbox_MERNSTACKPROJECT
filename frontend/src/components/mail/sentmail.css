@@ -1,0 +1,7 @@
+.row{
+    padding: 10px;
+    border: 1px solid rgb(115, 99, 99);
+    border-radius: 10px;
+    box-shadow: 4px 4px 8px rgba(0px,0px,0px,0.3px);
+    margin-bottom: 10px;
+}

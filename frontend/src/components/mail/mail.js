@@ -6,15 +6,21 @@ import pic from "../../assets/pic.webp"
 import { logout } from "../../store/authSlice";
 import { handleClose,handleSectionChange } from "../../store/mailviewSlice";
 import Compose from "./compose";
-import Sent from "./sent";
+import Sent from "./sentMail";
 import Inbox from "./inbox";
+import { useNavigate } from "react-router-dom";
 
 const Mail=()=>{
 
    const {islogin,name} =useSelector((state)=>state.auth)
    const dispatch=useDispatch()
    const activeSection=useSelector((state)=>state.mailview.activeSection)
-   console.log(activeSection)
+   const navigate=useNavigate()
+
+   const logOut=()=>{
+    dispatch(logout())
+    navigate('/login')
+   }
 
     return(
           <Fragment>
@@ -24,19 +30,18 @@ const Mail=()=>{
             <div className="main">
                 <div className="leftdiv">
                 <Image src={pic} alt="" style={{width:'60px',height:'60px',marginBottom:'20px'}}></Image>
-                <p style={{backgroundColor:'red',marginTop:'5px'}}>{name}</p>
                  {/* {islogin && ( */}
                   <ListGroup>
                   <ListGroup.Item className="list-space" action onClick={() => dispatch(handleSectionChange('compose'))}>
                    Compose 
                  </ListGroup.Item>
                  <ListGroup.Item  className="list-space" action onClick={() => dispatch(handleSectionChange('sent email'))} >
-                   Sent 
+                   Sent Mail
                  </ListGroup.Item>
                  <ListGroup.Item className="list-space" action onClick={() => dispatch(handleSectionChange('inbox'))}>
                   Inbox
                  </ListGroup.Item> 
-                 <ListGroup.Item className="list-space" action onClick={() => dispatch(logout())} >
+                 <ListGroup.Item className="list-space" action onClick={() => logOut()} >
                   Sign Out
                  </ListGroup.Item> 
                </ListGroup>
@@ -48,6 +53,8 @@ const Mail=()=>{
                   {activeSection === 'compose' && <Compose></Compose> }
                   {activeSection === 'sent email' && <Sent></Sent>}
                   {activeSection === 'inbox' && <Inbox></Inbox>}
+                 
+                 
                   </div>
                 </div>
             </div>
