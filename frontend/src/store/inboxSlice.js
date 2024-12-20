@@ -8,7 +8,7 @@ export const fetchInbox = createAsyncThunk(
       const response = await axios.get("http://localhost:5000/mail/inbox", {
         headers: { Authorization: token },
       });
-      return response.data.data; // Assuming data array is under 'data'
+      return response.data.data; 
     } catch (error) {
       return rejectWithValue(error.response?.data || "Failed to fetch inbox");
     }
@@ -18,7 +18,8 @@ export const fetchInbox = createAsyncThunk(
 const inboxSlice = createSlice({
   name: "inbox",
   initialState: {
-    messages: [],
+    inboxData: [],
+    unseenMessagesCount:0,
     status: "idle",
     error: null,
   },
@@ -30,11 +31,13 @@ const inboxSlice = createSlice({
       })
       .addCase(fetchInbox.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.messages = action.payload;
+        state.inboxData = action.payload;
+        state.unseenMessagesCount = action.payload.filter(msg => !msg.isSeen).length;
+        console.log(state.inboxData)
       })
       .addCase(fetchInbox.rejected, (state, action) => {
         state.status = "failed";
-        state.error = action.payload;
+        state.error = action.payload.message;
       });
   },
 });

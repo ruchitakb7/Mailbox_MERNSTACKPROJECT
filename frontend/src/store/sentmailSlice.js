@@ -39,7 +39,7 @@ const sentmailSlice = createSlice({
       })
       .addCase(getMail.rejected, (state, action) => {
         state.status = 'failed';
-        state.error = action.payload;
+        state.error = action.payload.message;
       });
   },
 });

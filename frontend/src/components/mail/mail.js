@@ -1,65 +1,53 @@
-import React ,{Fragment} from "react";
-import "./mail.css"
-import { useSelector,useDispatch } from "react-redux";
-import { ListGroup,Image} from "react-bootstrap";
-import pic from "../../assets/pic.webp"
+
+import React, { Fragment } from "react";
+import "./mail.css";
+import { ListGroup, Image,Button } from "react-bootstrap";
+import pic from "../../assets/pic.webp";
+import { NavLink, Outlet } from "react-router-dom";
 import { logout } from "../../store/authSlice";
-import { handleClose,handleSectionChange } from "../../store/mailviewSlice";
-import Compose from "./compose";
-import Sent from "./sentMail";
-import Inbox from "./inbox";
-import { useNavigate } from "react-router-dom";
+import { useDispatch,useSelector } from "react-redux";
 
-const Mail=()=>{
+const Mail = () => {
+ 
+  const dispatch=useDispatch()
+  const {unseenMessagesCount}=useSelector((state)=>state.inbox)
 
-   const {islogin,name} =useSelector((state)=>state.auth)
-   const dispatch=useDispatch()
-   const activeSection=useSelector((state)=>state.mailview.activeSection)
-   const navigate=useNavigate()
+  return (
+    <Fragment>
+      <header className="header">
+        <p>Mailbox</p>
+      </header>
+      <div className="main">
+        <div className="leftdiv">
+          <Image
+            src={pic}
+            alt=""
+            style={{ width: "60px", height: "60px", marginBottom: "20px" }}
+          />
+          <ListGroup>
+            <NavLink to="/mail/compose" className="list-space" activeClassName="active">
+              Compose
+            </NavLink>
+            <NavLink to="/mail/sent" className="list-space" activeClassName="active">
+              Sent Mail
+            </NavLink>
+            <NavLink to="/mail/inbox" className="list-space" activeClassName="active">
+              Inbox 
+              {unseenMessagesCount > 0 && (
+               <span className="unseen-count-badge">+{unseenMessagesCount}</span>)}
+            </NavLink>
+          </ListGroup>
+          <Button onClick={dispatch(logout())}>Sign Out</Button>
+        </div>
+        <div className="rightdiv">
+          <div className="rightcont">
+            {/* Outlet renders nested route content */}
+            <Outlet />
+          </div>
+        </div>
+      </div>
+    </Fragment>
+  );
+};
 
-   const logOut=()=>{
-    dispatch(logout())
-    navigate('/login')
-   }
-
-    return(
-          <Fragment>
-            <header className="header">
-             <p>Mailbox</p>
-            </header>
-            <div className="main">
-                <div className="leftdiv">
-                <Image src={pic} alt="" style={{width:'60px',height:'60px',marginBottom:'20px'}}></Image>
-                 {/* {islogin && ( */}
-                  <ListGroup>
-                  <ListGroup.Item className="list-space" action onClick={() => dispatch(handleSectionChange('compose'))}>
-                   Compose 
-                 </ListGroup.Item>
-                 <ListGroup.Item  className="list-space" action onClick={() => dispatch(handleSectionChange('sent email'))} >
-                   Sent Mail
-                 </ListGroup.Item>
-                 <ListGroup.Item className="list-space" action onClick={() => dispatch(handleSectionChange('inbox'))}>
-                  Inbox
-                 </ListGroup.Item> 
-                 <ListGroup.Item className="list-space" action onClick={() => logOut()} >
-                  Sign Out
-                 </ListGroup.Item> 
-               </ListGroup>
-                 {/* )} */}
-                </div>
-                <div className="rightdiv">
-                  <div className="rightcont">
-                 
-                  {activeSection === 'compose' && <Compose></Compose> }
-                  {activeSection === 'sent email' && <Sent></Sent>}
-                  {activeSection === 'inbox' && <Inbox></Inbox>}
-                 
-                 
-                  </div>
-                </div>
-            </div>
-          </Fragment>
-    )
-}
-
-export default Mail
+export default Mail;

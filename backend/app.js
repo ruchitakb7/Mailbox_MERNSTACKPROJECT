@@ -21,8 +21,6 @@ app.use(signuprouter);
 app.use(loginrouter)
 app.use(mailrouter)
 
-
-
 mongoose.connect(`mongodb+srv://ruchitakb7:${process.env.MONGODBPASS}@cluster0.0cb3i.mongodb.net/mailbox?retryWrites=true&w=majority`)
 .then(result=>{
     app.listen(PORT);

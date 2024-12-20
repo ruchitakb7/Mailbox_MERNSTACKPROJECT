@@ -8,4 +8,6 @@ router.post('/compose',authenticatation.authenticate,mailcontroller.compose)
 
 router.get('/mail/sent',authenticatation.authenticate,mailcontroller.sentMail)
 
+router.get('/mail/inbox',authenticatation.authenticate,mailcontroller.fetchInbox)
+
 module.exports=router

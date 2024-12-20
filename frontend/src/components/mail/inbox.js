@@ -7,32 +7,29 @@ export default function Inbox() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-//   const { messages, status, error } = useSelector((state) => state.inbox);
-  const { token } = useSelector((state) => state.auth); // Assuming token is stored in auth state
-  const messages= [
-    { "id": "1", "from": "user1@example.com", "subject": "Hello!", "date": "2023-12-18", "isRead": false },
-    { "id": "2", "from": "user2@example.com", "subject": "Meeting Reminder", "date": "2023-12-17", "isRead": true }
-  ]
+  const { inboxData, status, error } = useSelector((state) => state.inbox);
+  console.log(inboxData)
+  const { token } = useSelector((state) => state.auth); 
 
-//   useEffect(() => {
-//     if (token) {
-//       dispatch(fetchInbox(token));
-//     }
-//   }, [token, dispatch]);
+  useEffect(() => {
+    if (token) {
+      dispatch(fetchInbox(token));
+    }
+  }, [token, dispatch]);
 
-//   if (status === "loading") return <p>Loading...</p>;
-//   if (status === "failed") return <p>Error: {error}</p>;
+  if (status === "loading") return <p>Loading...</p>;
+  //if (status === "failed") return <p>{error}</p>;
 
 
   return (
-    <div className="container my-5">
-     
-      {messages.length === 0 ? (
-        <p className="text-center">No messages found.</p>
+    <div className="container my-5 mt-1">
+      {inboxData.length === 0 ? (
+        <p className="text-center">{error}</p>
       ) : (
         <table className="table table-hover">
           <thead className="thead-dark">
             <tr>
+              <th></th>
               <th>From</th>
               <th>Subject</th>
               <th>Date</th>
@@ -40,8 +37,9 @@ export default function Inbox() {
             </tr>
           </thead>
           <tbody>
-            {messages.map((message) => (
-              <tr key={message.id} className={message.isRead ? "" : "font-weight-bold"}>
+            {inboxData.map((message) => (
+              <tr key={message.id} className={message.isSeen ? "" : "font-weight-bold"}>
+                <td> {!message.isSeen && <span className="blue-dot me-2"></span>}</td>
                 <td>{message.from}</td>
                 <td
                   style={{ cursor: "pointer" }}
@@ -64,7 +62,6 @@ export default function Inbox() {
   );
 
   function handleDelete(id) {
-    // Implement delete functionality here
     console.log("Delete message ID:", id);
   }
 }

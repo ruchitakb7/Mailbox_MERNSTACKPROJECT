@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import EditorComponent from "./maileditor";
+import { Button } from 'react-bootstrap';
 import { updateTo, updateSubject, updateContent, sendMail } from '../../store/composeSlice';
 import "./ComposeMail.css"
 
@@ -30,11 +31,9 @@ export default function ComposeMail() {
 
   return (
     <div className="compose-mail-container">
-      <header className="bg-primary text-white d-flex justify-content-between">
+      <header className="bg-primary text-white d-flex justify-content-between fs-2">
         <h6>Compose Mail</h6>
-        <button className="btn btn-light" onClick={() => navigate(-1)}>
-          ✕
-        </button>
+        <Button size='sm' className='btn-dark' onClick={() => navigate(-1)}>✕</Button>
       </header>
       <div className="p-3">
       <div className="mb-3 d-flex align-items-center">
