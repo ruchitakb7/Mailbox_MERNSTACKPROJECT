@@ -2,6 +2,8 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchInbox } from "../../store/inboxSlice";
 import { useNavigate } from "react-router-dom";
+import "./inbox.css"
+import { Link } from "react-router-dom";
 
 export default function Inbox() {
   const dispatch = useDispatch();
@@ -18,13 +20,13 @@ export default function Inbox() {
   }, [token, dispatch]);
 
   if (status === "loading") return <p>Loading...</p>;
-  //if (status === "failed") return <p>{error}</p>;
+ 
 
 
   return (
     <div className="container my-5 mt-1">
       {inboxData.length === 0 ? (
-        <p className="text-center">{error}</p>
+        <p className="text-center fs-1 fw-bold text-dark">{error}</p>
       ) : (
         <table className="table table-hover">
           <thead className="thead-dark">
@@ -33,26 +35,24 @@ export default function Inbox() {
               <th>From</th>
               <th>Subject</th>
               <th>Date</th>
-              <th>Actions</th>
+              {/* <th>Actions</th> */}
             </tr>
           </thead>
           <tbody>
-            {inboxData.map((message) => (
+          {inboxData.map((message) => (
               <tr key={message.id} className={message.isSeen ? "" : "font-weight-bold"}>
-                <td> {!message.isSeen && <span className="blue-dot me-2"></span>}</td>
+                <td> {!message.isSeen && <span className="blue-dot"></span>}</td>
                 <td>{message.from}</td>
-                <td
-                  style={{ cursor: "pointer" }}
-                  onClick={() => navigate(`/inbox/${message.id}`)}
-                >
-                  {message.subject}
-                </td>
-                <td>{message.date}</td>
                 <td>
+                <Link to={`/mail/inbox/${message.id}`} className="text-decoration-none" style={{ cursor: "pointer" }}
+                 >{message.subject}</Link>
+                </td>
+                <td>{new Date(message.date).toLocaleString()}</td>
+                {/* <td>
                   <button className="btn btn-danger btn-sm" onClick={() => handleDelete(message.id)}>
                     Delete
                   </button>
-                </td>
+                </td> */}
               </tr>
             ))}
           </tbody>

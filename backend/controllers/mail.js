@@ -3,6 +3,14 @@ const User= require('../models/user')
 const Recipient = require('../models/reciept');
 
 
+function extractPlainText(editorContent) {
+   const parsedContent = JSON.parse(editorContent);
+
+  return parsedContent.blocks.map(block => block.text || '');
+}
+
+
+
 exports.compose = async (req, res, next) => {
   console.log('compose', req.user);
   try {
@@ -34,7 +42,7 @@ exports.compose = async (req, res, next) => {
 
 exports.sentMail = async (req, res, next) => {
   try {
-    // Find all mails sent by the current user
+   
     const mails = await Mail.find({ senderId: req.user.id, isDeleted: false });
 
     if (!mails || mails.length === 0) {
@@ -51,7 +59,7 @@ exports.sentMail = async (req, res, next) => {
           to: recipientData?.recipientId?.email , 
           date: mail.createdAt,
           subject: mail.subject,
-          content: mail.content,
+          content: extractPlainText(mail.content),
         };
       })
     );
@@ -66,27 +74,27 @@ exports.sentMail = async (req, res, next) => {
 
 exports.fetchInbox = async (req, res, next) => {
   try {
-    const messages = await Recipient.find({ recipientId: req.user.id })
+    const messages = await Recipient.find({ recipientId: req.user.id,isDeleted:false })
     .populate({
       path: 'emailId', 
       select: 'senderId subject content date isSeen isDeleted',
       populate: { path: 'senderId', model: 'User', select: 'email' }
     });
   
-    console.log(messages)
     if (!messages || messages.length === 0) {
       return res.status(404).json({ message: 'No messages found' });
     }
 
     const enhancedMails = messages.map(mail => ({
       id: mail._id,
-      from: mail.emailId?.senderId?.email,
-      date: mail.createdAt,
-      subject: mail.subject,
-      content: mail.content,
-      isSeen: mail.isSeen ,  
-      isDeleted: mail.isDeleted 
+  from: mail.emailId?.senderId?.email || 'Unknown', 
+  date: mail.emailId?.date || mail.createdAt, 
+  subject: mail.emailId?.subject || '', 
+  content: extractPlainText(mail.emailId?.content),
+  isSeen: mail.emailId?.isSeen || false, 
+  isDeleted: mail.emailId?.isDeleted || false,
     }));
+    console.log(enhancedMails)
 
     res.status(200).json(enhancedMails);
   } catch (error) {
@@ -95,3 +103,36 @@ exports.fetchInbox = async (req, res, next) => {
 };
 
 
+exports.deletebysender=async(req,res,next)=>{
+  try{
+      const {id}=req.params;
+      const response= await Mail.findByIdAndUpdate(id,{$set:{isDeleted:true}},{new:true})
+
+      if(!response)
+      {
+          return res.status(404).json({ message: 'Mail not found' })
+      }
+      return res.status(200).json({message:"Mail successfully deleted"})
+  }
+  catch(error){
+    return res.status(500).json({ error: error.message });
+  }
+}
+
+
+exports.deletefrominbox=async(req,res,next)=>{
+  try{
+    const {id}=req.params;
+    const response= await Recipient.findByIdAndUpdate(id,{$set:{isDeleted:true}},{new:true})
+    console.log('delete',response)
+
+    if(!response)
+    {
+        return res.status(404).json({ message: 'Mail not found' })
+    }
+    return res.status(200).json({message:"Mail successfully deleted"})
+}
+catch(error){
+  return res.status(500).json({ error: error.message });
+}
+}

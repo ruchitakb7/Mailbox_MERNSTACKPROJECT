@@ -1,0 +1,7 @@
+.blue-dot {
+    width: 10px; /* Size of the dot */
+    height: 10px;
+    background-color: blue; /* Dot color */
+    border-radius: 50%; /* Make it circular */
+    display: inline-block; /* Ensure it appears as an inline element */
+  }

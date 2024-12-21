@@ -18,13 +18,30 @@ export const getMail = createAsyncThunk(
   }
 );
 
-// Create the slice
+
+export const deletemailbySender=createAsyncThunk("mail/deletemailbySender",
+  async({token,id},{rejectWithValue})=>{
+    try{
+      const response=await axios.delete(`http://localhost:5000/mail/sent/delete/${id}`,{
+        headers:{Authorization:token},
+      })
+      console.log(response)
+      return response.data.message
+    }
+    catch(error){
+      return rejectWithValue(error.response?.data ||"Failed to delete mail, try again one more time.")
+    }
+  }
+)
+
+
 const sentmailSlice = createSlice({
   name: 'getmail',
   initialState: {
     sentMails: [],
     status: 'idle',
     error: null,
+    response:''
   },
   extraReducers: (builder) => {
     builder
@@ -40,7 +57,15 @@ const sentmailSlice = createSlice({
       .addCase(getMail.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.payload.message;
-      });
+      })
+      .addCase(deletemailbySender.fulfilled,(state,action)=>{
+        state.status="succeeded"
+        state.response=action.payload
+      })
+      .addCase(deletemailbySender.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.payload.message;
+      })
   },
 });
 

@@ -1,28 +1,27 @@
-const mongoose = require('mongoose'); // Import mongoose
-const Schema = mongoose.Schema; // Correctly assign the Schema constructor
+const mongoose = require('mongoose'); 
+const Schema = mongoose.Schema; 
 
 const ReceiptSchema = new Schema({
   emailId: {
     type: Schema.Types.ObjectId,
-    ref: 'Mail', // Reference the Mail model
-    required: true, // This field is mandatory
+    ref: 'Mail', 
+    required: true, 
   },
   recipientId: {
     type: Schema.Types.ObjectId,
-    ref: 'User', // Reference the User model
-    required: true, // This field is mandatory
+    ref: 'User', 
+    required: true, 
   },
   isDeleted: {
     type: Boolean,
-    default: false, // Default value for isDeleted
+    default: false, 
   },
   isSeen: {
     type: Boolean,
-    default: false, // Default value for isSeen
+    default: false, 
   },
 }, {
-  timestamps: true, // Automatically add createdAt and updatedAt fields
+  timestamps: true, 
 });
 
-// Export the Receipt model
 module.exports = mongoose.model('Receipt', ReceiptSchema);

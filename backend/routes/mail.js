@@ -10,4 +10,8 @@ router.get('/mail/sent',authenticatation.authenticate,mailcontroller.sentMail)
 
 router.get('/mail/inbox',authenticatation.authenticate,mailcontroller.fetchInbox)
 
+router.delete('/mail/sent/delete/:id',authenticatation.authenticate,mailcontroller.deletebysender)
+
+router.delete('/mail/inbox/delete/:id',authenticatation.authenticate,mailcontroller.deletefrominbox)
+
 module.exports=router

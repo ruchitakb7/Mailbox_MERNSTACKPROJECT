@@ -1,24 +1,33 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 import "./ComposeMail.css"
 import { Button } from "react-bootstrap";
+import { deletemailbySender } from "../../store/sentmailSlice";
 
 export default function InboxDetails() {
   const { id } = useParams();
   console.log(id)
   const navigate = useNavigate();
-   const { sentMails } = useSelector((state) => state.getmail);
+  const dispatch=useDispatch()
+
+  const { sentMails,response } = useSelector((state) => state.getmail);
+  const {token}=useSelector((state)=>state.auth)
   
   const message = sentMails.find((msg) => msg.id === id);
-
+  
+  const deleteMail=()=>{
+    dispatch(deletemailbySender({token,id}))
+    alert(response)
+    navigate('/mail/sent')
+  }
   
 
   return (
     <div className="compose-mail-container" style={{padding:'2px'}}>
           <header className="bg-primary text-white d-flex justify-content-between">
           <Button className="btn btn-dark" size="sm" onClick={() => navigate('/mail/sent')}> ← Back</Button>
-          {message && (<Button className="btn btn-light" >Delete </Button>)}  
+          {message && (<Button className="btn btn-dark" size="sm" onClick={()=>deleteMail()} >Delete </Button>)}  
           </header>
           {message ? (
         <div className="p-3">

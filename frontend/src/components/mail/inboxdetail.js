@@ -1,21 +1,33 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 import "./ComposeMail.css"
 import { Button } from "react-bootstrap";
+import { deleteinboxmail } from "../../store/inboxSlice";
 
 export default function InboxDetails() {
+
   const { id } = useParams();
   console.log(id)
   const navigate = useNavigate();
-   const { inbox } = useSelector((state) => state.inbox);
+  const dispatch=useDispatch()
+
+  const { inboxData,response,error} = useSelector((state) => state.inbox);
+  const {token}=useSelector((state)=>state.auth)
   
-  const message = inbox.find((msg) => msg.id === id);
+  const message = inboxData.find((msg) => msg.id === id);
+
+  const deleteMail=()=>{
+     dispatch(deleteinboxmail({token,id}))
+     alert(response)
+     navigate('/mail/inbox')
+  }
 
   return (
     <div className="compose-mail-container" style={{padding:'2px'}}>
           <header className="bg-primary text-white d-flex justify-content-between">
-          <Button className="btn btn-dark" size="sm" onClick={() => navigate('/mail/sent')}> ← Back</Button>
+          <Button className="btn btn-dark" size="sm" onClick={() => navigate('/mail/inbox')}> ← Back</Button>
+          <Button className="btn btn-dark" size="sm" onClick={()=> deleteMail()} >Delete </Button>
           </header>
           {message ? (
         <div className="p-3">
@@ -55,7 +67,9 @@ export default function InboxDetails() {
               readOnly
             />
           </div>
+          {error && <p>{error}</p>}
         </div>
+       
       ) : (
         <div className="text-center mt-4 text-danger">
           <p>Message not found.</p>
