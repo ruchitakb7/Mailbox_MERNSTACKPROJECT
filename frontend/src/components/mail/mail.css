@@ -42,13 +42,14 @@
     align-items: center;
   }
   .rightcont{
-    width: 100%;
+    width: 98%;
     height: 100vh;
     padding: 5px;
     margin-top: 50px;
     
     display: flex;
     justify-content: center;
+    overflow-y: auto;
   }
 
   .Button-class{

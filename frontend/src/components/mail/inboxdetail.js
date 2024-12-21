@@ -1,9 +1,9 @@
-import React from "react";
+import React,{useEffect} from "react";
 import { useSelector,useDispatch } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 import "./ComposeMail.css"
 import { Button } from "react-bootstrap";
-import { deleteinboxmail } from "../../store/inboxSlice";
+import { deleteinboxmail, markasSeen,fetchInbox } from "../../store/inboxSlice";
 
 export default function InboxDetails() {
 
@@ -22,6 +22,12 @@ export default function InboxDetails() {
      alert(response)
      navigate('/mail/inbox')
   }
+
+  useEffect(()=>{
+    if(!message.isSeen)
+    dispatch(markasSeen({token,id}))
+  dispatch(fetchInbox(token))
+  },[dispatch,id,message.isSeen])
 
   return (
     <div className="compose-mail-container" style={{padding:'2px'}}>

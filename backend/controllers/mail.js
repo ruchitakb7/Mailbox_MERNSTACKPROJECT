@@ -77,7 +77,7 @@ exports.fetchInbox = async (req, res, next) => {
     const messages = await Recipient.find({ recipientId: req.user.id,isDeleted:false })
     .populate({
       path: 'emailId', 
-      select: 'senderId subject content date isSeen isDeleted',
+      select: 'senderId subject content date',
       populate: { path: 'senderId', model: 'User', select: 'email' }
     });
   
@@ -86,13 +86,13 @@ exports.fetchInbox = async (req, res, next) => {
     }
 
     const enhancedMails = messages.map(mail => ({
-      id: mail._id,
+  id: mail._id,
   from: mail.emailId?.senderId?.email || 'Unknown', 
   date: mail.emailId?.date || mail.createdAt, 
   subject: mail.emailId?.subject || '', 
   content: extractPlainText(mail.emailId?.content),
-  isSeen: mail.emailId?.isSeen || false, 
-  isDeleted: mail.emailId?.isDeleted || false,
+  isSeen: mail.isSeen ,
+  isDeleted: mail.isDeleted 
     }));
     console.log(enhancedMails)
 
@@ -135,4 +135,18 @@ exports.deletefrominbox=async(req,res,next)=>{
 catch(error){
   return res.status(500).json({ error: error.message });
 }
+}
+
+
+exports.markasSeen=async(req,res,next)=>{
+  try{
+    const {id} = req.params
+    const response=await Recipient.findByIdAndUpdate(id,{$set:{isSeen:true}},{new:true})
+    console.log(response)
+    return res.status(200).json({message:'done'})
+  }
+  catch(error)
+  {
+    res.status(500).json({error})
+  }
 }

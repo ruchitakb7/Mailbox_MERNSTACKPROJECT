@@ -28,6 +28,7 @@ export default function Inbox() {
       {inboxData.length === 0 ? (
         <p className="text-center fs-1 fw-bold text-dark">{error}</p>
       ) : (
+        <div style={{ maxHeight: '500px', overflowY: 'auto' }}>
         <table className="table table-hover">
           <thead className="thead-dark">
             <tr>
@@ -35,7 +36,6 @@ export default function Inbox() {
               <th>From</th>
               <th>Subject</th>
               <th>Date</th>
-              {/* <th>Actions</th> */}
             </tr>
           </thead>
           <tbody>
@@ -44,19 +44,16 @@ export default function Inbox() {
                 <td> {!message.isSeen && <span className="blue-dot"></span>}</td>
                 <td>{message.from}</td>
                 <td>
-                <Link to={`/mail/inbox/${message.id}`} className="text-decoration-none" style={{ cursor: "pointer" }}
-                 >{message.subject}</Link>
+                <Link to={`/mail/inbox/${message.id}`} className="text-decoration-none" 
+                style={{ cursor: "pointer" }}>{message.subject}</Link>
                 </td>
                 <td>{new Date(message.date).toLocaleString()}</td>
-                {/* <td>
-                  <button className="btn btn-danger btn-sm" onClick={() => handleDelete(message.id)}>
-                    Delete
-                  </button>
-                </td> */}
+                
               </tr>
             ))}
           </tbody>
         </table>
+        </div>
       )}
     </div>
   );

@@ -14,4 +14,6 @@ router.delete('/mail/sent/delete/:id',authenticatation.authenticate,mailcontroll
 
 router.delete('/mail/inbox/delete/:id',authenticatation.authenticate,mailcontroller.deletefrominbox)
 
+router.put('/mail/inbox/seen/:id',authenticatation.authenticate,mailcontroller.markasSeen)
+
 module.exports=router

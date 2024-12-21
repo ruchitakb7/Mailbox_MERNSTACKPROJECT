@@ -5,3 +5,7 @@
     box-shadow: 4px 4px 8px rgba(0px,0px,0px,0.3px);
     margin-bottom: 10px;
 }
+
+.scroll{
+    overflow-x: auto;
+}

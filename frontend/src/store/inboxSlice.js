@@ -31,6 +31,27 @@ export const deleteinboxmail=createAsyncThunk("inbox/deleteinboxmail",
   }
 )
 
+export const markasSeen = createAsyncThunk(
+  "inbox/markasSeen",
+  async({ token, id }, { rejectWithValue }) => {
+    try {
+      const response = await axios.put(
+        `http://localhost:5000/mail/inbox/seen/${id}`,
+        {},
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+      return;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || "Failed to mark as seen, try again.");
+    }
+  }
+);
+
+
 const inboxSlice = createSlice({
   name: "inbox",
   initialState: {

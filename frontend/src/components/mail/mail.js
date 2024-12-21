@@ -40,7 +40,7 @@ const Mail = () => {
             </NavLink>
             <NavLink to="/mail/inbox" className="list-space" activeClassName="active">
             <Button className="Button-class btn-success">Inbox
-              {unseenMessagesCount >= 0 && (
+              {unseenMessagesCount > 0 && (
                <span className="fw-bold text-dark space-left">  +{unseenMessagesCount}</span>)} </Button> 
             </NavLink>
           </ListGroup>
