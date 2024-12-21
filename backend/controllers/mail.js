@@ -33,7 +33,7 @@ exports.compose = async (req, res, next) => {
       console.log('Recipient does not exist in the database.');
     }
 
-    return res.status(201).json({ message: 'Mail sent successfully', mail });
+    return res.status(201).json({ message: 'Mail sent successfully'});
   } catch (err) {
     console.error('Error composing mail:', err);
     return res.status(500).json({ message: 'Internal Server Error' });

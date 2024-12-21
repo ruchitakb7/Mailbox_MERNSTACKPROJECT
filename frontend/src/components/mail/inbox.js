@@ -61,7 +61,5 @@ export default function Inbox() {
     </div>
   );
 
-  function handleDelete(id) {
-    console.log("Delete message ID:", id);
-  }
+  
 }

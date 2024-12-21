@@ -22,8 +22,6 @@ export const sendMail = createAsyncThunk(
   }
 );
 
-
-
 const mailSlice = createSlice({
   name: 'compose',
   initialState: {
@@ -32,7 +30,8 @@ const mailSlice = createSlice({
     content: '',
     status: 'idle', // 'idle', 'loading', 'succeeded', 'failed'
     error: null,
-    sentMails: [],
+    // sentMails: [],
+    response:''
   },
   reducers: {
     updateTo: (state, action) => {
@@ -50,10 +49,14 @@ const mailSlice = createSlice({
       .addCase(sendMail.pending, (state) => {
         state.status = 'loading';
         state.error = null;
+        state.response=''
       })
       .addCase(sendMail.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        state.sentMails.push(action.payload);
+        state.response=action.payload.message;
+        state.to = '';
+        state.subject = '';
+        state.content = '';
       })
       .addCase(sendMail.rejected, (state, action) => {
         state.status = 'failed';
