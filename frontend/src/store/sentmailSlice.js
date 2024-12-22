@@ -41,7 +41,13 @@ const sentmailSlice = createSlice({
     sentMails: [],
     status: 'idle',
     error: null,
-    response:''
+    response:null
+  },
+  reducers:{
+    resetcomp:(state)=>{
+      state.response =null;
+      state.error=null
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -69,5 +75,5 @@ const sentmailSlice = createSlice({
   },
 });
 
-
+export const {resetcomp}=sentmailSlice.actions
 export default sentmailSlice.reducer;

@@ -59,9 +59,14 @@ const inboxSlice = createSlice({
     unseenMessagesCount:0,
     status: "idle",
     error: null,
-    response:'',
+    response:null,
   },
-  reducers: {},
+  reducers: {
+    resetinbox:(state)=>{
+       state.error=null;
+       state.response=null
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchInbox.pending, (state) => {
@@ -91,4 +96,5 @@ const inboxSlice = createSlice({
   },
 });
 
+export const {resetinbox}= inboxSlice.actions
 export default inboxSlice.reducer;

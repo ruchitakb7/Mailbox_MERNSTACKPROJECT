@@ -1,32 +1,41 @@
-import React,{useEffect} from "react";
+import React,{useEffect,useState} from "react";
 import { useSelector,useDispatch } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 import "./ComposeMail.css"
-import { Button } from "react-bootstrap";
-import { deleteinboxmail, markasSeen,fetchInbox } from "../../store/inboxSlice";
+import { Button,Modal } from "react-bootstrap";
+import { deleteinboxmail, markasSeen,fetchInbox,resetinbox } from "../../store/inboxSlice";
 
 export default function InboxDetails() {
 
   const { id } = useParams();
-  console.log(id)
+
   const navigate = useNavigate();
   const dispatch=useDispatch()
 
   const { inboxData,response,error} = useSelector((state) => state.inbox);
   const {token}=useSelector((state)=>state.auth)
+  const [show,setModal]=useState(false)
   
   const message = inboxData.find((msg) => msg.id === id);
 
   const deleteMail=()=>{
      dispatch(deleteinboxmail({token,id}))
-     alert(response)
-     navigate('/mail/inbox')
   }
+
+  useEffect(() => {
+        if (response) setModal(true);
+      }, [response]);
+
+  const onHide=()=>{
+       setModal(false)
+       dispatch(resetinbox())
+       navigate('/mail/inbox')
+    }
 
   useEffect(()=>{
     if(!message.isSeen)
     dispatch(markasSeen({token,id}))
-  dispatch(fetchInbox(token))
+    dispatch(fetchInbox(token))
   },[dispatch,id,message.isSeen])
 
   return (
@@ -81,6 +90,15 @@ export default function InboxDetails() {
           <p>Message not found.</p>
         </div>
       )}
+      <Modal  show={show} onHide={onHide}>
+        <Modal.Header>
+          <h6>Success</h6>
+        </Modal.Header>
+        <Modal.Body><center><p>{response}</p></center> </Modal.Body>
+        <Modal.Footer>
+        <Button  onClick={onHide}>ok</Button>
+        </Modal.Footer>
+      </Modal>
           
     </div>
   );

@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState={
-    activeSection:'compose',
+    activeSection:'inbox',
    
 }
 
@@ -14,7 +14,7 @@ const MailviewSlice=createSlice({
             state.activeSection=action.payload
         },
         handleClose(state){
-            state.activeSection='compose'
+            state.activeSection='inbox'
         },
       
     }

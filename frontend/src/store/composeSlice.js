@@ -30,8 +30,7 @@ const mailSlice = createSlice({
     content: '',
     status: 'idle', // 'idle', 'loading', 'succeeded', 'failed'
     error: null,
-    // sentMails: [],
-    response:''
+    response:null
   },
   reducers: {
     updateTo: (state, action) => {
@@ -43,13 +42,21 @@ const mailSlice = createSlice({
     updateContent: (state, action) => {
       state.content = action.payload;
     },
+    resetCompose: (state) => {
+      state.to = '';
+      state.subject = '';
+      state.content = '';
+      state.status = 'idle';
+      state.error = '';
+      state.response = null
+    },
   },
   extraReducers: (builder) => {
     builder
       .addCase(sendMail.pending, (state) => {
         state.status = 'loading';
         state.error = null;
-        state.response=''
+        state.response=null
       })
       .addCase(sendMail.fulfilled, (state, action) => {
         state.status = 'succeeded';
@@ -60,10 +67,10 @@ const mailSlice = createSlice({
       })
       .addCase(sendMail.rejected, (state, action) => {
         state.status = 'failed';
-        state.error = action.payload.message;
+        state.error = action.payload?.message || action.payload || 'An error occurred';
       });
   },
 });
 
-export const { updateTo, updateSubject, updateContent } = mailSlice.actions;
+export const { updateTo, updateSubject, updateContent,resetCompose } = mailSlice.actions;
 export default mailSlice.reducer;

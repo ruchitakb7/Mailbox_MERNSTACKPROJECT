@@ -32,13 +32,13 @@ const Mail = () => {
             style={{ width: "60px", height: "60px", marginBottom: "20px" }}
           />
           <ListGroup >
-            <NavLink to="/mail/compose" className="list-space" activeClassName="active">
+            <NavLink to="/mail/compose" className="list-space" activeclassname="active">
               <Button className="Button-class btn-success">Compose</Button>
             </NavLink>
-            <NavLink to="/mail/sent" className="list-space" activeClassName="active">
+            <NavLink to="/mail/sent" className="list-space" activeclassname="active">
             <Button className="Button-class btn-success">Sent Mail</Button>
             </NavLink>
-            <NavLink to="/mail/inbox" className="list-space" activeClassName="active">
+            <NavLink to="/mail/inbox" className="list-space" activeclassname="active">
             <Button className="Button-class btn-success">Inbox
               {unseenMessagesCount > 0 && (
                <span className="fw-bold text-dark space-left">  +{unseenMessagesCount}</span>)} </Button> 
@@ -46,6 +46,7 @@ const Mail = () => {
           </ListGroup>
           <Button className="Button-class" onClick={()=>logOut()}>Sign Out</Button>
         </div>
+
         <div className="rightdiv">
           <div className="rightcont">
             <Outlet />

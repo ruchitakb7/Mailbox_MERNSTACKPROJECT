@@ -29,8 +29,8 @@ const Login = () => {
     
 
   return (
-    <div class="maindiv">
-        <div class="left-div" style={{justifyContent:'center'}}>
+    <div className="maindiv">
+        <div className="left-div" style={{justifyContent:'center'}}>
         <h5>Login In To Mailbox</h5>
         <Image
             src={pic}
@@ -64,40 +64,21 @@ const Login = () => {
                 onChange={handleChange}
               />
             </Form.Group>
-            <Link
-            className="text-sm font-semibold text-blue-600 hover:text-blue-700"
-            to="/forgot-password"
-          >
-            Forgot password?
-          </Link>
-           
+            <Link className="text-sm font-semibold text-blue-600 hover:text-blue-700"
+            to="/forgot-password">Forgot password?</Link>
             <div className="text-center mt-3 mb-2">
               <Button variant="primary" type="submit" className="w-100">
                 Login
               </Button>
             </div>
-           
           </Form>
-          <div>
-                        <p>
-                          Don't have an account?{" "}
-                          <span>
-                            <Link
-                              className="text-sm font-semibold text-blue-600 hover:text-blue-700"
-                              to="/signup"
-                            >
-                              Signup
-                            </Link>
-                          </span>
-                        </p>
-                      </div>
-
-                      {formlogErrors && (
+          <div><p>Don't have an account?{" "}<span><Link className="text-sm font-semibold text-blue-600 hover:text-blue-700"
+                              to="/signup">Signup</Link></span></p>
+                      </div>{formlogErrors && (
                <p className="text-danger mb-3 centred">
                  {typeof formlogErrors === "string" ? formlogErrors : JSON.stringify(formlogErrors)}
               </p>)}
          </div>
-        
          <Modal show={showModal} onHide={onHide} centered>
                  <Modal.Header>
                    <Modal.Title>Success</Modal.Title>
@@ -110,7 +91,7 @@ const Login = () => {
                      OK
                    </Button>
                  </Modal.Footer>
-               </Modal>
+               </Modal>  
 </div>
 
   );

@@ -1,5 +1,4 @@
 
-
 import React, { useState } from 'react';
 import { EditorState, convertToRaw } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
@@ -9,7 +8,6 @@ import './maileditor.css';
 export default function EditorComponent({ onContentChange }) {
 
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
-
 
   const handleEditorChange = (newEditorState) => {
     setEditorState(newEditorState);

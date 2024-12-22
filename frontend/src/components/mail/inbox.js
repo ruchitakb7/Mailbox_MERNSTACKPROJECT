@@ -26,7 +26,7 @@ export default function Inbox() {
   return (
     <div className="container my-5 mt-1">
       {inboxData.length === 0 ? (
-        <p className="text-center fs-1 fw-bold text-dark">{error}</p>
+        <p  style={{ marginTop: '200px', marginLeft: "300px", fontSize: '25px', fontWeight: 'bold' }}>{error}</p>
       ) : (
         <div style={{ maxHeight: '500px', overflowY: 'auto' }}>
         <table className="table table-hover">

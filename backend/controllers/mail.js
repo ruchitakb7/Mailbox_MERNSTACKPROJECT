@@ -6,7 +6,7 @@ const Recipient = require('../models/reciept');
 function extractPlainText(editorContent) {
    const parsedContent = JSON.parse(editorContent);
 
-  return parsedContent.blocks.map(block => block.text || '');
+  return parsedContent.blocks.map(block => block.text);
 }
 
 

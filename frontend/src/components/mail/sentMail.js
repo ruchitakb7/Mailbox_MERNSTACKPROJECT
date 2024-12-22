@@ -32,6 +32,7 @@ export default function ComposeMail() {
   return (
     <div style={{ width: '98%', marginTop: '10px',height:'90%', overflowY: 'auto', 
       overflowX: 'hidden',}}>
+        <p>Total:{sentMails.length}</p>
       {Object.keys(groupedMails).length > 0 ? (
         Object.entries(groupedMails).map(([date, mails]) => (
           <div key={date} className="grouped-mails">

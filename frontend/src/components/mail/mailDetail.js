@@ -1,9 +1,9 @@
-import React from "react";
+import React,{useEffect,useState} from "react";
 import { useSelector,useDispatch } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 import "./ComposeMail.css"
-import { Button } from "react-bootstrap";
-import { deletemailbySender } from "../../store/sentmailSlice";
+import { Button ,Modal} from "react-bootstrap";
+import { deletemailbySender,resetcomp } from "../../store/sentmailSlice";
 
 export default function InboxDetails() {
   const { id } = useParams();
@@ -13,15 +13,24 @@ export default function InboxDetails() {
 
   const { sentMails,response } = useSelector((state) => state.getmail);
   const {token}=useSelector((state)=>state.auth)
+  const [show,setModal]=useState(false)
   
   const message = sentMails.find((msg) => msg.id === id);
+ 
   
   const deleteMail=()=>{
     dispatch(deletemailbySender({token,id}))
-    alert(response)
-    navigate('/mail/sent')
   }
   
+   useEffect(() => {
+      if (response) setModal(true);
+    }, [response]);
+
+    const onHide=()=>{
+           setModal(false)
+           dispatch(resetcomp())
+           navigate('/mail/sent')
+        }
 
   return (
     <div className="compose-mail-container" style={{padding:'2px'}}>
@@ -73,6 +82,16 @@ export default function InboxDetails() {
           <p>Message not found.</p>
         </div>
       )}
+
+       <Modal  show={show} onHide={onHide}>
+              <Modal.Header>
+                <h6>Success</h6>
+              </Modal.Header>
+              <Modal.Body><center><p>{response}</p></center> </Modal.Body>
+              <Modal.Footer>
+              <Button  onClick={onHide}>ok</Button>
+              </Modal.Footer>
+            </Modal>
           
     </div>
   );
