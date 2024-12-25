@@ -1,5 +1,4 @@
-
-import React, { Fragment } from "react";
+import React, { Fragment,useEffect } from "react";
 import "./mail.css";
 import { ListGroup, Image,Button } from "react-bootstrap";
 import pic from "../../assets/pic.webp";
@@ -7,20 +6,50 @@ import { NavLink, Outlet } from "react-router-dom";
 import { logout } from "../../store/authSlice";
 import { useDispatch,useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify"
+import { fetchInbox } from "../../store/inboxSlice";
+
+import io from "socket.io-client"
+const socket = io('http://localhost:5000');
+console.log(socket)
 
 const Mail = () => {
  
   const dispatch=useDispatch()
   const navigate=useNavigate()
   const {unseenMessagesCount}=useSelector((state)=>state.inbox)
+  const {userId,token}=useSelector((state)=>state.auth)
 
   const logOut=()=>{
     dispatch(logout())
     navigate('/login')
   }
 
+  useEffect(() => {
+    socket.on('new-mail', (data) => {
+      console.log('New mail received:');
+      if(userId===data.receiverId){
+        console.log('New mail received:');
+        toast(`You have received a new mail`, {
+          position: "top-right",
+          autoClose: 3000,
+          type: "info",
+        })
+        dispatch(fetchInbox(token))
+      }
+      });
+      socket.on('error', (error) => {
+        console.error('WebSocket connection error:', error);
+      })
+
+    return () => {
+      socket.disconnect();
+    };
+  }, [dispatch,userId,token]);
+
   return (
     <Fragment>
+      <ToastContainer/>
       <header className="header">
         <p>Mailbox</p>
       </header>

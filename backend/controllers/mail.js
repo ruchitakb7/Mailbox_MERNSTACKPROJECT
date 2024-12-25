@@ -1,6 +1,7 @@
 const Mail= require('../models/mail')
 const User= require('../models/user')
 const Recipient = require('../models/reciept');
+//const io = require('socket.io')(server);
 
 
 function extractPlainText(editorContent) {
@@ -8,8 +9,6 @@ function extractPlainText(editorContent) {
 
   return parsedContent.blocks.map(block => block.text);
 }
-
-
 
 exports.compose = async (req, res, next) => {
   console.log('compose', req.user);
@@ -29,7 +28,12 @@ exports.compose = async (req, res, next) => {
         emailId: mail._id, 
         recipientId: recipient._id, 
       });
-    } else {
+      io.emit('new-mail', {receiverId: recipient._id });
+      //io.to(recipient._id.toString()).emit('new-mail',{receiverId: recipient._id});
+      
+    } 
+    else
+    {
       console.log('Recipient does not exist in the database.');
     }
 
@@ -94,7 +98,7 @@ exports.fetchInbox = async (req, res, next) => {
   isSeen: mail.isSeen ,
   isDeleted: mail.isDeleted 
     }));
-    console.log(enhancedMails)
+    
 
     res.status(200).json(enhancedMails);
   } catch (error) {
@@ -142,7 +146,7 @@ exports.markasSeen=async(req,res,next)=>{
   try{
     const {id} = req.params
     const response=await Recipient.findByIdAndUpdate(id,{$set:{isSeen:true}},{new:true})
-    console.log(response)
+    //console.log(response)
     return res.status(200).json({message:'done'})
   }
   catch(error)

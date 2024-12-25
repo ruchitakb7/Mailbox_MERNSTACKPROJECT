@@ -25,6 +25,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import 'react-bootstrap/dist/react-bootstrap';  // Correct way to import react-bootstrap
 import 'bootstrap/dist/css/bootstrap.css';
+import 'react-toastify/ReactToastify.css';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import store from './store/store';
